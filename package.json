@@ -1,0 +1,14 @@
+{
+	"nativescript": {
+		"id": "org.nativescript.tsAppTask"
+	},
+	"dependencies": {
+		"email-validator": "^1.0.4",
+		"tns-core-modules": "1.7.0",
+		"ts-promise": "^0.3.0"
+	},
+	"devDependencies": {
+		"nativescript-dev-typescript": "^0.3.0",
+		"typescript": "^1.8.9"
+	}
+}

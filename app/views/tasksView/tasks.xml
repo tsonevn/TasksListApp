@@ -1,0 +1,14 @@
+<Page loaded="load">
+    <ActionBar title="Tasks Page">
+        <ActionItem text="SignOut" tap="signOutButton"/>
+    </ActionBar>
+    <ListView items="{{ tasksItems }}" isScrolling="{{ isScrolling }}" itemTap="listTasks" id="listViewTasks">
+        <ListView.itemTemplate>
+            <GridLayout>
+                <Label text="{{ Content || 'Loading...' }}" id="taskInfo" textWrap="true" class="title" />
+                <Iamge src="res://ic_menu_delete" ios:visibility="collapsed" col="1" tap="delete"/>
+                <!--<Span text="NativeScript" id="Id" />-->
+            </GridLayout>
+        </ListView.itemTemplate>
+    </ListView>
+</Page>

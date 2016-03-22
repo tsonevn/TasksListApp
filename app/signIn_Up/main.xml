@@ -1,0 +1,44 @@
+<Page loaded="load" >
+    <Page.actionBar>
+        <ActionBar title="New social">
+        <ActionItem tap="showInfo" ios.position="right" android.systemIcon="ic_menu_info" android.position="right" text="info"  id="actItem"/></ActionBar>
+    </Page.actionBar>
+    <TabView id="tabviewStyle" tabsBackgroundColor="darkcyan" selectedColor="lightcoral" id="mainTabView">
+        <TabView.items>
+            <TabViewItem title="Sing IN" id="singinTabId" style="'Arial Black', Gadget, sans-serif">
+                <TabViewItem.view>
+                <!--<StackLayout >-->
+                    <!--<ScrollView >-->
+                        <StackLayout >
+                        
+                        <!--<grid-layout columns="*" rows="*">-->
+                            <!--<Image src="res://icon" id="mainLogo"/>-->
+                        <!--</grid-layout>-->
+                        <grid-layout rows="auto, auto">
+                            <TextField hint="Enter email" keyboardType="email" text="{{email}}" id="emialSignInField"  row="0"/>
+                            <TextField hint="Enter password" text="{{password}}" secure="true" id="passSignInField"  row="1"/>
+                            <activity-indicator busy="{{authenticating}}" rowSpan="2" />
+                         </grid-layout>
+                        <Button text="Sing In" tap="singInButton" class="buttonStyle" id="signInButton"/>
+                        
+                        </StackLayout>
+                    <!--</ScrollView>-->
+                   <!--</StackLayout>-->
+                </TabViewItem.view>
+            </TabViewItem>
+             <TabViewItem title="Sing UP" id="singupTabId" >
+                <TabViewItem.view>
+                    <StackLayout orientation="vertical">
+                        <grid-layout rows="auto, auto">
+                            <TextField hint="Enter email" keyboardType="email" text="{{registrationemail}}" id="emialSignUpField" row="0"/>
+                            <TextField hint="Enter password"  text="{{registrationpassword}}" secure="true" id="passSignUpField" row="1"/>
+                            <activity-indicator busy="{{registrationAuthenticating}}" rowSpan="2" />
+                        </grid-layout>
+                         <Button text="Sing Up" tap="singUpButton" class="buttonStyle" id="signUpButton"/>
+                    </StackLayout>
+                   
+                </TabViewItem.view>
+            </TabViewItem>
+        </TabView.items>
+    </TabView>
+</Page>
