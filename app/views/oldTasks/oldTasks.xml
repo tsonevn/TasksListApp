@@ -1,0 +1,17 @@
+<Page loaded="load">
+    <ActionBar title="Old tasks page">
+        <NavigationButton text="Go Back" android.systemIcon="ic_menu_back" tap="backNav"/>
+        <ActionItem text="SignOut" tap="signOutButton" ios.position="right"  android.position="popup"/>
+    </ActionBar>
+    <GridLayout  columns="2*, *">    
+        <ListView items="{{ tasksItems }}" isScrolling="{{ isScrolling }}" itemTap="listTasks" returnKeyType="done" id="listViewTasks"  colSpan="2">
+            <ListView.itemTemplate>
+                <GridLayout columns="auto, *, auto">
+                    <Image tap="toggleDone" src="res://checked" class="checkbox" col="0" id="{{Id}}"/>
+                    <Label text="{{ Content || 'Loading...' }}" id="taskInfo" textWrap="true" class="title" col="1"/>
+                    <Image src="res://ic_menu_delete" ios:visibility="collapsed" col="2" tap="deleteTask" id="{{Id}}"/>
+                </GridLayout>
+            </ListView.itemTemplate>
+        </ListView>
+    </GridLayout>
+</Page>

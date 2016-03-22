@@ -14,9 +14,10 @@
                         <!--<grid-layout columns="*" rows="*">-->
                             <!--<Image src="res://icon" id="mainLogo"/>-->
                         <!--</grid-layout>-->
-                        <grid-layout rows="auto, auto">
-                            <TextField hint="Enter email" keyboardType="email" text="{{email}}" id="emialSignInField"  row="0"/>
-                            <TextField hint="Enter password" text="{{password}}" secure="true" id="passSignInField"  row="1"/>
+                        <grid-layout rows="auto, auto, auto" >
+                            <Image src="~/App_Resources/Android/drawable-nodpi/splashscreen.9.png" id="mainLogo" row="0"/>
+                            <TextField hint="Enter email" keyboardType="email" text="{{email}}" id="emialSignInField"  row="1"/>
+                            <TextField hint="Enter password" text="{{password}}" secure="true" id="passSignInField"  row="2"/>
                             <activity-indicator busy="{{authenticating}}" rowSpan="2" />
                          </grid-layout>
                         <Button text="Sing In" tap="singInButton" class="buttonStyle" id="signInButton"/>

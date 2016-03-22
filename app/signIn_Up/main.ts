@@ -1,6 +1,6 @@
 import {User} from "../shared/view-models/user-model";
 import observableModule = require("data/observable");
-import navigation = require("../shared/navigation");
+import {navigation} from "../shared/navigation";
 import frameModule = require("ui/frame");
 import {TextField} from "ui/text-field";
 import {TabView} from "ui/tab-view";
@@ -60,7 +60,6 @@ function enableSignInForm():void {
 export function singInButton(eventData){
    
   Promise.setLongTraces(true);
-    //var p = Promise.resolve();
        user.login()
         .catch(function(){
             console.log("error");
@@ -68,24 +67,6 @@ export function singInButton(eventData){
             return Promise.reject(new Error("Error login"));
         })
         .then(navigation.goToListPage);
-  
-        // .then(function(status){
-        //     switch (status) {
-        //     case true:
-        //        
-        //         break;
-        //     case false:
-        //         tabView.selectedIndex = 1;
-        //         break;
-        //     default:
-        //         break;
-        // }
-        // })
-   
-        
-    
-    
-    
 }
 
 function registerNewUser(){

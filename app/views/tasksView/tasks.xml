@@ -1,14 +1,20 @@
 <Page loaded="load">
     <ActionBar title="Tasks Page">
-        <ActionItem text="SignOut" tap="signOutButton"/>
+        <ActionItem text="Old tasks" tap="oldTask" ios.position="left"  android.position="popup"/>
+        <ActionItem text="SignOut" tap="signOutButton" ios.position="right"  android.position="popup"/>
     </ActionBar>
-    <ListView items="{{ tasksItems }}" isScrolling="{{ isScrolling }}" itemTap="listTasks" id="listViewTasks">
-        <ListView.itemTemplate>
-            <GridLayout>
-                <Label text="{{ Content || 'Loading...' }}" id="taskInfo" textWrap="true" class="title" />
-                <Iamge src="res://ic_menu_delete" ios:visibility="collapsed" col="1" tap="delete"/>
-                <!--<Span text="NativeScript" id="Id" />-->
-            </GridLayout>
-        </ListView.itemTemplate>
-    </ListView>
+    <GridLayout rows="auto, *" columns="2*, *">
+        <TextField id="newtask" text="{{ newTask }}" hint="Enter a task content" row="0" col="0" returnKeyType="done" returnPress="add"/>
+        <Button text="Add" tap="add" row="0" col="1" />
+        
+        <ListView items="{{ tasksItems }}" isScrolling="{{ isScrolling }}" itemTap="listTasks" returnKeyType="done" id="listViewTasks" row="1" colSpan="2">
+            <ListView.itemTemplate>
+                <GridLayout columns="auto, *, auto">
+                    <Image tap="toggleDone" src="res://unchecked" class="checkbox" col="0" id="{{Id}}"/>
+                    <Label text="{{ Content || 'Loading...' }}" id="taskInfo" textWrap="true" class="title" col="1"/>
+                    <Image src="res://ic_menu_delete" ios:visibility="collapsed" col="2" tap="deleteTask" id="{{Id}}"/>
+                </GridLayout>
+            </ListView.itemTemplate>
+        </ListView>
+    </GridLayout>
 </Page>

@@ -1,6 +1,6 @@
 "use strict";
 var user_model_1 = require("../shared/view-models/user-model");
-var navigation = require("../shared/navigation");
+var navigation_1 = require("../shared/navigation");
 var ts_promise_1 = require("ts-promise");
 var page;
 var emailSignIn;
@@ -41,26 +41,13 @@ function enableSignInForm() {
 }
 function singInButton(eventData) {
     ts_promise_1.Promise.setLongTraces(true);
-    //var p = Promise.resolve();
     user.login()
         .catch(function () {
         console.log("error");
         registerNewUser();
         return ts_promise_1.Promise.reject(new Error("Error login"));
     })
-        .then(navigation.goToListPage);
-    // .then(function(status){
-    //     switch (status) {
-    //     case true:
-    //        
-    //         break;
-    //     case false:
-    //         tabView.selectedIndex = 1;
-    //         break;
-    //     default:
-    //         break;
-    // }
-    // })
+        .then(navigation_1.navigation.goToListPage);
 }
 exports.singInButton = singInButton;
 function registerNewUser() {
