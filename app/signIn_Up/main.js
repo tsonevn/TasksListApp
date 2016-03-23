@@ -74,4 +74,8 @@ function singUpButton(eventData) {
     loginUser();
 }
 exports.singUpButton = singUpButton;
+function resetAccount() {
+    navigation_1.navigation.goToResetPage();
+}
+exports.resetAccount = resetAccount;
 //# sourceMappingURL=main.js.map

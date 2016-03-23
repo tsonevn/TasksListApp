@@ -97,3 +97,8 @@ export function singUpButton(eventData) {
        user.registration()
        loginUser();
 }
+
+
+export function resetAccount(){
+    navigation.goToResetPage();
+}

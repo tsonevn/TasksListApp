@@ -4,6 +4,7 @@ var EverLive = require("../../everlive");
 var config = require("../config");
 var dialogs_1 = require("ui/dialogs");
 var observable_array_1 = require("data/observable-array");
+var validator = require("email-validator");
 var tmpConfig = new config.Config;
 var User = (function (_super) {
     __extends(User, _super);
@@ -15,65 +16,79 @@ var User = (function (_super) {
         this._registrationAuthenticating = tmpRegistrationAuthenticating;
         User._mytaskList = new observable_array_1.ObservableArray();
         this._everlive = new EverLive(tmpConfig.appID);
+        this._resetEmail = "";
     }
     User.prototype.login = function () {
         //console.log("email - "+this._email);
-        return this._everlive.authentication.login(this._email, this._password)
-            .then(function (data) {
-            tmpConfig.userToken = data.result.principal_id;
-            //console.log(JSON.stringify(data));
-            // return data.json();
-            console.log("login");
-        }, function (error) {
+        if (this.validateEmail(this._registrationEmail)) {
+            return this._everlive.authentication.login(this._email, this._password)
+                .then(function (data) {
+                tmpConfig.userToken = data.result.principal_id;
+                console.log("login");
+            }, function (error) {
+                dialogs_1.alert({
+                    message: "Unfortunately we could not find your account.",
+                    okButtonText: "OK"
+                });
+                console.log("error");
+                return handleErrors(error);
+            });
+        }
+        else {
             dialogs_1.alert({
-                message: "Unfortunately we could not find your account.",
+                message: "Enter a valid email address.",
                 okButtonText: "OK"
             });
-            console.log("error");
-            return handleErrors(error);
-        });
+        }
     };
     User.prototype.registration = function () {
-        console.log(this._registrationEmail + " " + this._registrationPassword);
-        this._everlive.Users.register(this._registrationEmail, this._registrationPassword, { "Email": this._registrationEmail }, function (data) {
-            //   tmpConfig.userToken = data.result.principal_id;
-            //console.log(JSON.stringify(data));
-            // return data.json();
-            console.log("login");
-        }, function (error) {
+        if (this.validateEmail(this._registrationEmail)) {
+            console.log(this._registrationEmail + " " + this._registrationPassword);
+            this._everlive.Users.register(this._registrationEmail, this._registrationPassword, { "Email": this._registrationEmail }, function (data) {
+                console.log("login");
+            }, function (error) {
+                dialogs_1.alert({
+                    message: "Unfortunately we could not create your account.",
+                    okButtonText: "OK"
+                });
+                console.log("error");
+                console.log(handleErrors(error));
+            });
+        }
+        else {
             dialogs_1.alert({
-                message: "Unfortunately we could not create your account.",
+                message: "Enter a valid email address.",
                 okButtonText: "OK"
             });
-            console.log("error");
-            console.log(handleErrors(error));
-        });
+        }
+    };
+    User.prototype.resetUserAccount = function () {
+        if (this.validateEmail(this._resetEmail)) {
+            this._everlive.Users.resetPassword({ "Email": this._resetEmail }, function (data) {
+                console.log(JSON.stringify(data));
+                dialogs_1.alert({
+                    message: "We send you reset password Email.",
+                    okButtonText: "OK"
+                });
+            }, function (error) {
+                dialogs_1.alert({
+                    message: "Unfortunately we could not find your account.",
+                    okButtonText: "OK"
+                });
+                console.log(JSON.stringify(error));
+            });
+        }
+        else {
+            dialogs_1.alert({
+                message: "Enter a valid email address.",
+                okButtonText: "OK"
+            });
+        }
+    };
+    User.prototype.validateEmail = function (tmpValidateEmail) {
+        return validator.validate(tmpValidateEmail);
     };
     Object.defineProperty(User.prototype, "email", {
-        //     loadTasks(){
-        //         var Tasks = this._everlive.data("Tasks");
-        //         var filter = new this._everlive.Query();
-        // filter.where().eq('CreatedBy', config.Config._UserToken);
-        //         // this._mytaskList
-        //        return Tasks.get(filter)
-        //             .then(
-        //                 function(data){
-        //                     console.log(JSON.stringify(data));
-        //                     for(var item of data.result){
-        //                         var newTask:Task;
-        //                         newTask.content =item.Content;
-        //                         newTask.id = item.Id;
-        //                         console.log("result - "+item.Content+" - "+item.Id);
-        //                         User._mytaskList.push(newTask);
-        //                     }  
-        //                     console.log("array size - "+User._mytaskList.length);
-        //                 },
-        //                 function(error){
-        //                     console.log(JSON.stringify(error));
-        //                     return handleErrors(error);
-        //                 }
-        //             )
-        //     }
         get: function () {
             return this._email;
         },
@@ -113,6 +128,17 @@ var User = (function (_super) {
         set: function (value) {
             this._registrationPassword = value;
             _super.prototype.notify.call(this, { object: this, eventName: observable_1.Observable.propertyChangeEvent, propertyName: "registrationpassword", value: value });
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(User.prototype, "resetEmail", {
+        get: function () {
+            return this._resetEmail;
+        },
+        set: function (value) {
+            this._resetEmail = value;
+            _super.prototype.notify.call(this, { object: this, eventName: observable_1.Observable.propertyChangeEvent, propertyName: "resetEmail", value: value });
         },
         enumerable: true,
         configurable: true

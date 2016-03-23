@@ -42,7 +42,19 @@ export module navigation{
     
     export function goToOldTasksListPage(){
         frameModule.topmost().navigate({
-            moduleName:"views/oldTasks/oldTasks",
+            moduleName:"views/oldTasks/oldTasks/resetPassword",
+            animated: true,
+            transition: {
+                name: "slide",
+                duration: 380,
+                curve: "easeIn"
+            }
+    });
+    }
+    
+    export function goToResetPage(){
+        frameModule.topmost().navigate({
+            moduleName:"views/password/resetPassword",
             animated: true,
             transition: {
                 name: "slide",

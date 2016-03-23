@@ -1,9 +1,10 @@
 import {Observable} from "data/observable";
 import EverLive = require("../../everlive");
 import config =require("../config");
-import {alert} from "ui/dialogs"
-import {Promise} from "ts-promise"
-import {ObservableArray} from "data/observable-array"
+import {alert} from "ui/dialogs";
+import {Promise} from "ts-promise";
+import {ObservableArray} from "data/observable-array";
+import validator = require("email-validator");
 
 var tmpConfig:config.Config = new  config.Config;
 
@@ -21,6 +22,7 @@ export class User extends Observable{
     private _registrationAuthenticating:boolean;
     static _mytaskList;
     private _everlive;
+    private _resetEmail;
     
    constructor(tmpAuthenticating:boolean,tmpRegistrationAuthenticating:boolean,tmpEmail?:string, tmpPassword?:string){
        super();
@@ -30,74 +32,90 @@ export class User extends Observable{
        this._registrationAuthenticating = tmpRegistrationAuthenticating;
        User._mytaskList = new ObservableArray();
        this._everlive =new  EverLive(tmpConfig.appID);
+       this._resetEmail = "";
    }
    
    login(){
        //console.log("email - "+this._email);
-      return this._everlive.authentication.login(this._email, this._password) 
-            .then(function (data) { // success callback
-                tmpConfig.userToken = data.result.principal_id;
-                //console.log(JSON.stringify(data));
-               // return data.json();
-               console.log("login");
-        },
-        function(error) { 
-            alert({
-				message: "Unfortunately we could not find your account.",
-				okButtonText: "OK"
-			});
-            console.log("error");
-            return handleErrors(error);
-        })
+       if(this.validateEmail(this._registrationEmail)){
+        return this._everlive.authentication.login(this._email, this._password) 
+                .then(function (data) { // success callback
+                    tmpConfig.userToken = data.result.principal_id;
+                console.log("login");
+            },
+            function(error) { 
+                alert({
+                    message: "Unfortunately we could not find your account.",
+                    okButtonText: "OK"
+                });
+                console.log("error");
+                return handleErrors(error);
+            });
+       }
+       else{
+           alert({
+                message: "Enter a valid email address.",
+                okButtonText: "OK"
+             });
+       }
       
    }
    registration(){
-       console.log(this._registrationEmail+" "+this._registrationPassword);
-       this._everlive.Users.register(this._registrationEmail,
-       this._registrationPassword,
-       {"Email":this._registrationEmail},
-       function (data) { // success callback
-             //   tmpConfig.userToken = data.result.principal_id;
-                //console.log(JSON.stringify(data));
-               // return data.json();
-               console.log("login");
-        },
-        function(error) { 
+       if(this.validateEmail(this._registrationEmail)){
+        console.log(this._registrationEmail+" "+this._registrationPassword);
+        this._everlive.Users.register(this._registrationEmail,
+        this._registrationPassword,
+        {"Email":this._registrationEmail},
+        function (data) { 
+                console.log("login");
+            },
+            function(error) { 
+                alert({
+                    message: "Unfortunately we could not create your account.",
+                    okButtonText: "OK"
+                });
+                console.log("error");
+                console.log( handleErrors(error));
+            });
+        }
+        else{
             alert({
-				message: "Unfortunately we could not create your account.",
-				okButtonText: "OK"
-			});
-            console.log("error");
-            console.log( handleErrors(error));
-        })
+                message: "Enter a valid email address.",
+                okButtonText: "OK"
+             });
+        }
       
     }
-//     loadTasks(){
-//         var Tasks = this._everlive.data("Tasks");
-//         var filter = new this._everlive.Query();
-// filter.where().eq('CreatedBy', config.Config._UserToken);
-
-//         // this._mytaskList
-//        return Tasks.get(filter)
-//             .then(
-//                 function(data){
-//                     console.log(JSON.stringify(data));
-//                     for(var item of data.result){
-//                         var newTask:Task;
-//                         newTask.content =item.Content;
-//                         newTask.id = item.Id;
-//                         console.log("result - "+item.Content+" - "+item.Id);
-//                         User._mytaskList.push(newTask);
-                        
-//                     }  
-//                     console.log("array size - "+User._mytaskList.length);
-//                 },
-//                 function(error){
-//                     console.log(JSON.stringify(error));
-//                     return handleErrors(error);
-//                 }
-//             )
-//     }
+    
+    resetUserAccount(){
+        if(this.validateEmail(this._resetEmail)){
+            this._everlive.Users.resetPassword({"Email": this._resetEmail},
+                function (data) {
+                    console.log(JSON.stringify(data));
+                    alert({
+                        message: "We send you reset password Email.",
+                        okButtonText: "OK"
+                    });
+                },
+                function(error){
+                    alert({
+                        message: "Unfortunately we could not find your account.",
+                        okButtonText: "OK"
+                    });
+                    console.log(JSON.stringify(error));
+            });
+        }
+        else{
+            alert({
+                message: "Enter a valid email address.",
+                okButtonText: "OK"
+             });
+        }
+    }
+    
+    validateEmail(tmpValidateEmail:string){
+        return validator.validate(tmpValidateEmail);
+    }
 
    
    public get email(): string{
@@ -132,6 +150,14 @@ export class User extends Observable{
        super.notify({ object: this, eventName: Observable.propertyChangeEvent, propertyName: "registrationpassword", value: value });
    }
    
+   public get resetEmail(): string{
+       return this._resetEmail;
+   }
+   public set resetEmail(value: string){
+       this._resetEmail = value;
+       super.notify({ object: this, eventName: Observable.propertyChangeEvent, propertyName: "resetEmail", value: value });
+   }
+   
    public get authenticating(): boolean{
        return this._authenticating;
    }
@@ -148,15 +174,9 @@ export class User extends Observable{
        super.notify({ object: this, eventName: Observable.propertyChangeEvent, propertyName: "registrationAuthenticating", value: value });
    }
    
-//    public get mytaskList(): {
-//        return this._mytaskList;
-//    }
-//    public set mytaskList(value: JSON){
-//        this._mytaskList = value;
-//        super.notify({ object: this, eventName: Observable.propertyChangeEvent, propertyName: "mytaskList", value: value });
-//    }
-   
-}
+      
+
+ }
 
 function handleErrors(response) {
 	if (!response.ok) {

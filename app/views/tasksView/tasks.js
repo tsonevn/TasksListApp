@@ -3,38 +3,16 @@ var task_app_view_model_1 = require("../../shared/view-models/task-app-view-mode
 var frame_1 = require("ui/frame");
 var navigation_1 = require("../../shared/navigation");
 var page;
-//var user:User = new User(false, false);
 var listview;
 var taskManager = new task_app_view_model_1.Tasks();
+taskManager.filterCompleted = false;
 function load(args) {
     page = args.object;
     page.bindingContext = taskManager;
     listview = page.getViewById("listViewTasks");
-    //loadTasksList();
 }
 exports.load = load;
 ;
-// function loadTasksList(): void{
-//     user.loadTasks()
-//     .catch(function(){
-//             console.log("error");
-//             return Promise.reject(new Error("Error load tasks"));
-//         })
-//         .then(function name(responce:string) {
-//         });
-// }
-// export function listTasks(args){
-//     var index =<number> args.index;
-//     console.log("index - "+index);
-//     var tmpLabel:Label = args.object.getViewById("taskInfo");
-//     console.log("id - "+tmpLabel._getValue);
-// }
-// listview.on(ListView.itemTapEvent, function(args: ItemEventData) {
-//      var tappedItemIndex:number = args.index;
-//     console.log(tappedItemIndex);
-//     //taskManager.deleteTask(tappedItemIndex);
-//     // Do something
-// });
 function signOutButton() {
     navigation_1.navigation.signOut();
     frame_1.topmost().navigate({
@@ -49,17 +27,10 @@ function signOutButton() {
 }
 exports.signOutButton = signOutButton;
 ;
-// export function listTasks(args:ItemEventData){
-//     var itemIndex:number = args.index;
-//     var itemView:View = args.view;
-//     console.log("tapp - "+itemIndex);
-//     taskManager.deleteTask(itemIndex);
-// }
 function deleteTask(args) {
     var itemId = args.view.get("id");
     var itemIndex = taskManager.findIndex(itemId);
     taskManager.deleteTask(itemIndex, itemId);
-    // console.log("--------- "+itemIndex);
 }
 exports.deleteTask = deleteTask;
 function add(args) {

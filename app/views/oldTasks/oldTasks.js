@@ -5,11 +5,11 @@ var navigation_1 = require("../../shared/navigation");
 var page;
 var listview;
 var taskManager = new task_app_view_model_1.Tasks();
+taskManager.filterCompleted = true;
 function load(args) {
     page = args.object;
     page.bindingContext = taskManager;
     listview = page.getViewById("listViewTasks");
-    taskManager.filterCompleted = true;
 }
 exports.load = load;
 ;

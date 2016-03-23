@@ -43,7 +43,7 @@ var navigation;
     navigation.goToListPage = goToListPage;
     function goToOldTasksListPage() {
         frameModule.topmost().navigate({
-            moduleName: "views/oldTasks/oldTasks",
+            moduleName: "views/oldTasks/oldTasks/resetPassword",
             animated: true,
             transition: {
                 name: "slide",
@@ -53,6 +53,18 @@ var navigation;
         });
     }
     navigation.goToOldTasksListPage = goToOldTasksListPage;
+    function goToResetPage() {
+        frameModule.topmost().navigate({
+            moduleName: "views/password/resetPassword",
+            animated: true,
+            transition: {
+                name: "slide",
+                duration: 380,
+                curve: "easeIn"
+            }
+        });
+    }
+    navigation.goToResetPage = goToResetPage;
     function signOut() {
         newConfig.userToken = "";
     }
