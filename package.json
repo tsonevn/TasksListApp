@@ -1,14 +1,24 @@
 {
-	"nativescript": {
-		"id": "org.nativescript.tsAppTask"
-	},
-	"dependencies": {
-		"email-validator": "^1.0.4",
-		"tns-core-modules": "1.7.0",
-		"ts-promise": "^0.3.0"
-	},
-	"devDependencies": {
-		"nativescript-dev-typescript": "^0.3.0",
-		"typescript": "^1.8.9"
-	}
+  "nativescript": {
+    "id": "org.nativescript.tsAppTask",
+    "tns-android": {
+      "version": "1.7.1"
+    }
+  },
+  "dependencies": {
+    "email-validator": "^1.0.4",
+    "nativescript-unit-test-runner": "^0.3.3",
+    "tns-core-modules": "^1.7.1",
+    "ts-promise": "^0.3.0"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.0",
+    "grunt-typedoc": "^0.2.3",
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.13.22",
+    "karma-jasmine": "^0.3.8",
+    "karma-nativescript-launcher": "^0.4.0",
+    "nativescript-dev-typescript": "^0.3.0",
+    "typescript": "^1.8.9"
+  }
 }

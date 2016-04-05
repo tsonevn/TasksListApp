@@ -37,11 +37,13 @@ export class User extends Observable{
    
    login(){
        //console.log("email - "+this._email);
-       if(this.validateEmail(this._registrationEmail)){
+       if(this.validateEmail(this._email)){
         return this._everlive.authentication.login(this._email, this._password) 
                 .then(function (data) { // success callback
                     tmpConfig.userToken = data.result.principal_id;
                 console.log("login");
+                //console.log(tmpConfig.userToken);
+                return true;
             },
             function(error) { 
                 alert({
@@ -113,7 +115,7 @@ export class User extends Observable{
         }
     }
     
-    validateEmail(tmpValidateEmail:string){
+    validateEmail(tmpValidateEmail:string):boolean{
         return validator.validate(tmpValidateEmail);
     }
 
@@ -173,9 +175,6 @@ export class User extends Observable{
        this._registrationAuthenticating = value;
        super.notify({ object: this, eventName: Observable.propertyChangeEvent, propertyName: "registrationAuthenticating", value: value });
    }
-   
-      
-
  }
 
 function handleErrors(response) {
